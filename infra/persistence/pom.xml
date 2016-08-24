@@ -24,12 +24,6 @@
         <hibernate.import_files>/import.sql</hibernate.import_files>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-        </dependency>
-    </dependencies>
     <build>
         <plugins>
             <plugin>

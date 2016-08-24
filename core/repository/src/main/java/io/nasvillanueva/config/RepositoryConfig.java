@@ -3,6 +3,7 @@ package io.nasvillanueva.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -23,7 +24,8 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories("io.nasvillanueva.repository")
+@EnableJpaRepositories("io.nasvillanueva.repositories")
+@PropertySource("classpath:datasource.properties")
 public class RepositoryConfig {
 
     @Autowired
@@ -33,7 +35,7 @@ public class RepositoryConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("com.nasvillanueva.model");
+        em.setPackagesToScan("io.nasvillanueva.model");
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
@@ -44,10 +46,10 @@ public class RepositoryConfig {
     @Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
-        dataSource.setUrl("jdbc:hsqldb:mem:spring");
-        dataSource.setUsername("sa");
-        dataSource.setPassword("");
+        dataSource.setDriverClassName(env.getProperty("hibernate.connection.driver_class"));
+        dataSource.setUrl(env.getProperty("hibernate.connection.url"));
+        dataSource.setUsername(env.getProperty("hibernate.connection.username"));
+        dataSource.setPassword(env.getProperty("hibernate.connection.password"));
         return dataSource;
     }
 
@@ -66,9 +68,10 @@ public class RepositoryConfig {
 
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+        properties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        properties.setProperty("hibernate.hbm2ddl.import_files", env.getProperty("hibernate.hbm2ddl.auto.import_files"));
         return properties;
     }
 }

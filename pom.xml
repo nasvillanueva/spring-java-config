@@ -21,6 +21,7 @@
         <spring.version>4.3.2.RELEASE</spring.version>
         <spring-security.version>4.1.2.RELEASE</spring-security.version>
         <spring-data.version>1.10.2.RELEASE</spring-data.version>
+        <spring-data-commons.version>1.12.2.RELEASE</spring-data-commons.version>
 
         <commons-lang3.version>3.4</commons-lang3.version>
         <modelmapper.version>0.7.6</modelmapper.version>
@@ -95,6 +96,11 @@
             <!-- Spring Security -->
             <dependency>
                 <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring-security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-web</artifactId>
                 <version>${spring-security.version}</version>
             </dependency>
@@ -120,12 +126,6 @@
 
             <dependency>
                 <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data</artifactId>
-                <version>${spring-data.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-jpa</artifactId>
                 <version>${spring-data.version}</version>
             </dependency>
@@ -134,6 +134,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jdbc</artifactId>
                 <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-commons</artifactId>
+                <version>${spring-data-commons.version}</version>
             </dependency>
 
 
@@ -168,6 +174,11 @@
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
                 <version>${persistence.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${hibernate.version}</version>
             </dependency>
 
             <!-- Database -->
