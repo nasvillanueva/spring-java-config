@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,6 +37,7 @@ public class UserAccount extends BaseEntity implements UserDetails {
     @Column
     private Boolean enabled = true;
 
+    @OneToOne
     @JoinColumn(name = "ROLE_ID")
     private Role role;
 
