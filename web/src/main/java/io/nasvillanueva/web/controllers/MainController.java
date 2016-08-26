@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MainController {
 
     @RequestMapping
-    public String get(Model model){
+    public String index(Model model){
         model.addAttribute("Teest", "Nas");
         return "index";
     }

@@ -20,6 +20,10 @@ public abstract class BaseEntity implements Persistable<Long> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public Long getId() {
         return id;

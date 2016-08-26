@@ -1,22 +1,22 @@
 package io.nasvillanueva.model.entities;
 
 import io.nasvillanueva.model.base.BaseEntity;
+import io.nasvillanueva.model.ref.RoleType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by jvillanueva on 8/24/16.
  */
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class UserAccount extends BaseEntity implements UserDetails {
 
     @Column
@@ -37,9 +37,11 @@ public class UserAccount extends BaseEntity implements UserDetails {
     @Column
     private Boolean enabled = true;
 
-    @OneToOne
-    @JoinColumn(name = "ROLE_ID")
-    private Role role;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "JOIN_USER_ACCOUNT_X_ROLE",
+            joinColumns = @JoinColumn(name = "USER_ACCOUNT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    private Set<Role> roles = new HashSet<>();
 
     public void setUsername(String username) {
         this.username = username;
@@ -81,17 +83,21 @@ public class UserAccount extends BaseEntity implements UserDetails {
         this.enabled = enabled;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Stream.of(new SimpleGrantedAuthority(role.getRoleType().name())).collect(Collectors.toList());
+        return roles.stream() //get All Roles
+                .map(Role::getRoleType) // get each role type
+                .map(RoleType::name) // get each roletypes name
+                .map(SimpleGrantedAuthority::new) // pass it to the constructor of SimpleGrantedAuthority, an implementation of GrantedAuthrotiy
+                .collect(Collectors.toSet()); // collect it to set.
     }
 
     @Override
